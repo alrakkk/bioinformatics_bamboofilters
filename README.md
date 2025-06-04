@@ -33,7 +33,6 @@ The Bamboo Filter includes tools to benchmark performance using the E. coli refe
 ### Download E. coli Genome
 
 ```bash
-# From the build directory
 make download_ecoli
 ```
 
@@ -48,16 +47,20 @@ The main benchmark tool is `bamboofilter_ecoli` which supports various operation
 
 # Test with different k-mer sizes
 ./tools/bamboofilter_ecoli --fasta-path /path/to/ecoli.fasta --kmer-size 15
-./tools/bamboofilter_ecoli --fasta-path /path/to/ecoli.fasta --kmer-size 25
-
-# Test false positive rates
-./tools/bamboofilter_ecoli --fasta-path /path/to/ecoli.fasta --false-positives --kmer-size 25
 
 # Test deletion performance
 ./tools/bamboofilter_ecoli --fasta-path /path/to/ecoli.fasta --action delete --kmer-size 25
 
 # Control maximum number of k-mers to process
 ./tools/bamboofilter_ecoli --fasta-path /path/to/ecoli.fasta --kmer-size 25 --max-kmers 50000
+
+```
+
+For experiments with fixed-length subarrays of the genome and automatic false
+positive measurement you can use the `subarray_kmers` tool:
+
+```bash
+./tools/subarray_kmers --fasta-path /path/to/ecoli.fasta
 ```
 
 ## Understanding Benchmark Results
@@ -69,10 +72,8 @@ The benchmark tool outputs detailed performance metrics to `bamboo_filter_result
 - `insert_time_ms`: Time taken to insert all k-mers (ms)
 - `insert_throughput`: Insert operations per second
 - `lookup_time_ms`: Time taken for lookups (ms)
-- `lookup_throughput`: Lookup operations per second
 - `false_positive_rate`: Percentage of false positives (lower is better)
 - `peak_memory_mb`: Maximum memory usage (MB)
-- `expand_memory_mb`: Memory growth during expansion
 - `bits_per_element`: Memory efficiency metric
 
 ## Comparative Evaluation

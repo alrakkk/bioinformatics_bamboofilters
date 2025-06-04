@@ -22,3 +22,15 @@ target_include_directories(bamboofilter_ecoli PRIVATE
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_SOURCE_DIR}/src 
     ${CURL_INCLUDE_DIRS} ${ZLIB_INCLUDE_DIRS})
+
+add_executable(subarray_kmers
+    ${PROJECT_SOURCE_DIR}/tools/subarray_kmers.cpp)
+
+target_link_libraries(subarray_kmers
+    ecoli_parser
+    header
+    pthread)
+
+target_include_directories(subarray_kmers PRIVATE
+    ${PROJECT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/src)
