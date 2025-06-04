@@ -118,3 +118,7 @@ Benchmarks show that Bamboo Filters outperform existing alternatives:
 ## References
 
 1. National Center for Biotechnology Information (NCBI). *Escherichia coli* str. K-12 substr. MG1655, complete genome. Assembly accession GCF_000005845.2, RefSeq. Available from: https://www.ncbi.nlm.nih.gov/assembly/GCF_000005845.2. Public Domain.
+2. Wang, Y., Wei, Z., Liu, G., & Sun, L. (2022). Bamboo Filters: Make Resizing Smooth. In 2022 IEEE 38th International Conference on Data Engineering (ICDE) (pp. 1421-1433). IEEE. doi: 10.1109/ICDE53745.2022.00078
+3. Wang, Y., Wei, Z., Liu, G., & Sun, L. (2024). Bamboo Filters: Make Resizing Smooth and Adaptive. IEEE/ACM Transactions on Networking. doi: 10.1109/TNET.2024.3403997
+4. Fan, B., Andersen, D. G., & Kaminsky, M. (2013). Cuckoo Filter: Better Than Bloom. USENIX ;login:, 38(4), 36-40. Retrieved from https://www.cs.cmu.edu/~binfan/papers/login_cuckoofilter.pdf
+5. Fan, B., Andersen, D. G., Kaminsky, M., & Mitzenmacher, M. D. (2014). Cuckoo Filter: Practically Better Than Bloom. In Proceedings of the 10th ACM International on Conference on emerging Networking Experiments and Technologies (pp. 75-88). ACM. Retrieved from http://www.cs.cmu.edu/~binfan/papers/conext14_cuckoofilter.pdf
