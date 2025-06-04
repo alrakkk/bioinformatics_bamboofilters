@@ -69,10 +69,8 @@ The benchmark tool outputs detailed performance metrics to `bamboo_filter_result
 - `insert_time_ms`: Time taken to insert all k-mers (ms)
 - `insert_throughput`: Insert operations per second
 - `lookup_time_ms`: Time taken for lookups (ms)
-- `lookup_throughput`: Lookup operations per second
 - `false_positive_rate`: Percentage of false positives (lower is better)
 - `peak_memory_mb`: Maximum memory usage (MB)
-- `expand_memory_mb`: Memory growth during expansion
 - `bits_per_element`: Memory efficiency metric
 
 ## Comparative Evaluation
