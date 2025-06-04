@@ -1,6 +1,6 @@
 # bamboofilters for bioinformatics
 
-A high-performance approximate membership query data structure for k-mer analysis in genomic data. Bamboo filters implement insertion, lookup, and deletion operations with constant-time cost, and support dynamic resizing through expanding and compressing the hash table.
+A high-performance approximate membership query data structure for k-mer analysis in genomic data. Bamboo filters implement insertion, lookup, and deletion operations with constant-time cost, and support dynamic resizing through incremental expansion of the hash table.
 
 ## Features
 
@@ -14,8 +14,8 @@ A high-performance approximate membership query data structure for k-mer analysi
 
 ```bash
 # Clone the repository
-git clone https://github.com/alrakkk/bamboofilters.git
-cd bamboofilters
+git clone https://github.com/alrakkk/bioinformatics_bamboofilters.git
+cd bioinformatics_bamboofilters
 
 # Create build directory
 mkdir build
