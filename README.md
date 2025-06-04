@@ -2,6 +2,10 @@
 
 A high-performance approximate membership query data structure for k-mer analysis in genomic data. Bamboo filters implement insertion, lookup, and deletion operations with constant-time cost, and support dynamic resizing through incremental expansion of the hash table.
 
+For a closer look at how the filter is organised internally, see [`docs/algorithm.md`](docs/algorithm.md).
+
+Example results from running this tool are provided in [`docs/subarray_kmers_results.md`](docs/subarray_kmers_results.md).
+
 ## Features
 
 - **High throughput** for insertions, lookups, and deletions
@@ -26,9 +30,31 @@ cmake ..
 make
 ```
 
+### Required Packages
+
+Building the tools and tests requires several system libraries:
+
+- **libcurl**
+- **zlib**
+- **OpenSSL**
+
+Installation hints for common platforms:
+
+```bash
+# Debian/Ubuntu
+sudo apt-get install libcurl4-openssl-dev zlib1g-dev libssl-dev
+
+# Fedora/RHEL
+sudo dnf install libcurl-devel zlib-devel openssl-devel
+
+# macOS (Homebrew)
+brew install curl zlib openssl
+```
+
 ## E. coli Benchmark
 
 The Bamboo Filter includes tools to benchmark performance using the E. coli reference genome.
+The reference genome file `data/GCF_000005845.2_ASM584v2_genomic.fna` is the *E. coli* K-12 MG1655 assembly obtained from the National Center for Biotechnology Information (NCBI) RefSeq database (assembly accession [GCF_000005845.2](https://www.ncbi.nlm.nih.gov/assembly/GCF_000005845.2)). NCBI places this sequence data in the public domain as a U.S. Government work.
 
 ### Download E. coli Genome
 
@@ -51,7 +77,7 @@ The main benchmark tool is `bamboofilter_ecoli` which supports various operation
 # Test deletion performance
 ./tools/bamboofilter_ecoli --fasta-path /path/to/ecoli.fasta --action delete --kmer-size 25
 
-# Control maximum number of k-mers to process
+# Control the maximum number of k-mers to process
 ./tools/bamboofilter_ecoli --fasta-path /path/to/ecoli.fasta --kmer-size 25 --max-kmers 50000
 
 ```
@@ -75,28 +101,20 @@ The benchmark tool outputs detailed performance metrics to `bamboo_filter_result
 - `false_positive_rate`: Percentage of false positives (lower is better)
 - `peak_memory_mb`: Maximum memory usage (MB)
 - `bits_per_element`: Memory efficiency metric
-
-## Comparative Evaluation
-
-Bamboo Filters are compared against these existing data structures:
-
-| Algorithm | Description                                                                                                                                                                                                                                                                                               |
-| :-------: | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|    DBF    | D. Guo, J. Wu, H. Chen, Y. Yuan, and X. Luo, "The Dynamic Bloom Filters," IEEE Transactions on Knowledge and Data Engineering, vol. 22, no. 1, pp. 120–133, 2009. Implementation: https://github.com/CGCL-codes/DCF/tree/master/src_DBF                                                                   |
-|    EBF    | Y. Wu, J. He, S. Yan, J. Wu, T. Yang, O. Ruas, G. Zhang, and B. Cui, "Elastic Bloom Filter: Deletable and ExpandableFilter Using Elastic Fingerprints," IEEE Transactions on Computers, vol. 1, no. 1, pp. 1–8, 2021. Implementation: https://github.com/Dustin-He/ElasticBloomFilter/blob/master/bloom.h |
-|    SBF    | K. Xie, Y. Min, D. Zhang, J. Wen, and G. Xie, "A Scalable Bloom Filter for Membership Queries," in Proceedings of the Global Communications Conference. IEEE, 2007, pp. 543–547. Implementation: https://github.com/Dustin-He/ElasticBloomFilter/blob/master/ScalableBF.h                                 |
-|    DCF    | H. Chen, L. Liao, H. Jin, and J. Wu, "The Dynamic Cuckoo Filter," in Proceedings of International Conference on Network Protocols. IEEE, 2017, pp. 1–10. Implementation: https://github.com/CGCL-codes/DCF                                                                                                |
-|   SuRF    | H. Zhang, H. Lim, V. Leis, D. G. Andersen, M. Kaminsky, K. Keeton, and A. Pavlo, "SuRF: Practical Range Query Filtering with Fast Succinct Tries," in Proceedings of International Conference on Management of Data. ACM, 2018, pp. 323–336. Implementation: https://github.com/efficient/SuRF            |
-|   E2CF    | S. Yu, S. Wu,H. Chen, and H. Jin, "The entry-extensible cuckoo filter," in Proceedings of International Federation for Information Processing. Springer, 2020, pp. 373–385. Implementation: https://github.com/CGCL-codes/E2CF                                                                            |
-|    TCF    | J. Apple, "Stretching your data with taffy filters," arXiv preprint arXiv:2109.01947v4, 2022. Implementation: https://github.com/jbapple/libfilter                                                                                                                                                        |
+-                                                                                                                                                       |
 
 ## Performance Results
 
-Our benchmarks show that Bamboo Filters outperform existing alternatives:
+Benchmarks show that Bamboo Filters outperform existing alternatives:
 
-- Highest insertion throughput (5-10M operations/second)
+- Highest insertion throughput 
 - Superior positive lookup throughput
-- Efficient deletion operations (~5.4M operations/second)
+- Efficient deletion operations 
 - Minimal performance degradation after multiple resizing operations
 - Lower false positive rates for genomic data than comparable structures
 - Memory efficiency comparable to state-of-the-art AMQ data structures
+
+
+## References
+
+1. National Center for Biotechnology Information (NCBI). *Escherichia coli* str. K-12 substr. MG1655, complete genome. Assembly accession GCF_000005845.2, RefSeq. Available from: https://www.ncbi.nlm.nih.gov/assembly/GCF_000005845.2. Public Domain.

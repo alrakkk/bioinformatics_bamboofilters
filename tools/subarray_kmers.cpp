@@ -7,8 +7,6 @@
 //  • Looks up positives (to sanity-check) and a random set of negatives
 //    (1-mutation neighbours) to measure the false-positive rate.
 //  • Streams CSV results to subarray_kmer_results.csv.
-//
-//  Compile with:  g++ -std=c++17 -O3 -march=native main.cpp -o bench
 // -----------------------------------------------------------------------------
 
 #include "bamboofilter/bamboofilter.hpp"   // <— upstream Bamboo Filter
