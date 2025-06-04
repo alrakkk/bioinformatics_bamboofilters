@@ -15,8 +15,7 @@ add_executable(bamboofilter_ecoli
     ${PROJECT_SOURCE_DIR}/src/run_ecoli.cpp)
 target_link_libraries(bamboofilter_ecoli
     ecoli_parser
-    header  
-    hash    
+    header      
     pthread
     ${CURL_LIBRARIES} ${ZLIB_LIBRARIES})
 target_include_directories(bamboofilter_ecoli PRIVATE

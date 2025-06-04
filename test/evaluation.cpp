@@ -14,16 +14,36 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <openssl/rand.h>
+#include <chrono>
 
 #include "bamboofilter/bamboofilter.hpp"
 #include "bamboofilter/bitsutil.h"
 
-#include "common/random.h"
-#include "common/timing.h"
 
 #define loop(x, a, b) for (uint64_t x = a; x < b; ++x)
 
 using namespace std;
+
+uint64_t NowNanos() {
+    return chrono::duration_cast<chrono::nanoseconds>(
+        chrono::high_resolution_clock::now().time_since_epoch()
+    ).count();
+}
+
+// Replacement for common/random.h
+void GenerateRandom64(size_t count, vector<string>& to_add, vector<string>& to_lookup) {
+    to_add.resize(count);
+    to_lookup.resize(count);
+    
+    random_device rd;
+    mt19937_64 gen(rd());
+    
+    for (size_t i = 0; i < count; i++) {
+        string str = to_string(gen());
+        to_add[i] = str;
+        to_lookup[i] = str;
+    }
+}
 
 int main(int argc, char *argv[])
 {
@@ -40,7 +60,7 @@ int main(int argc, char *argv[])
     {
         auto add_count = exp_idx * 200000;
 
-        BambooFilter *bbf = new BambooFilter(upperpower2(200000), 2);
+        BambooFilter *bbf = new BambooFilter(upper_power2(200000), 2);
         for (uint64_t added = 0; added < add_count; added++)
         {
             bbf->Insert(to_add[added].c_str());
