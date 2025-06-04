@@ -33,7 +33,6 @@ The Bamboo Filter includes tools to benchmark performance using the E. coli refe
 ### Download E. coli Genome
 
 ```bash
-# From the build directory
 make download_ecoli
 ```
 
