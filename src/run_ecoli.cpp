@@ -1,4 +1,4 @@
-/* run_ecoli.cpp  –  FER Bioinformatics 1 2024/25
+/* run_ecoli.cpp
  *
  * Driver for benchmarking the Bamboo Filter on genomic k-mers.
 
@@ -29,9 +29,6 @@
 
 using namespace std;                       // allowed by course rules
 
-/* ==================================================================== */
-/*                              HELPERS                                 */
-/* ==================================================================== */
 
 /* -------------------------------------------------------------------- */
 /** Generate *n* test k-mers that **should NOT** be in the filter.
@@ -164,7 +161,9 @@ static void run_benchmark(const string& seq, int k, size_t maxK, bool measureFP)
     // Normalize the success count too
     ok /= LOOKUP_REPEAT;
 
-    /* ---------- OPTIONAL false-positive test ---------------------- */
+
+    size_t true_pos = ok;        // all positives looked up correctly
+    size_t true_neg = 0;         // negatives are optional
     double fp_rate = 0.0;
     if (measureFP) {
         auto fp_kmers = generate_false_positive_tests(seq, k, 10000);
@@ -172,6 +171,7 @@ static void run_benchmark(const string& seq, int k, size_t maxK, bool measureFP)
         for (const auto& s : fp_kmers)
             if (bf.Lookup(hash_kmer(s))) ++fp;
         fp_rate = double(fp) / fp_kmers.size();
+        true_neg = fp_kmers.size() - fp;      // correctly rejected negatives
     }
 
     /* ---------- HUMAN-READABLE summary ---------------------------- */
@@ -181,21 +181,23 @@ static void run_benchmark(const string& seq, int k, size_t maxK, bool measureFP)
          << inserted * 1000.0 / ins_ms << " ops/s)\n"
          << "Lookup   " << look_ms << " ms  ("
          << lookTests * 1000.0 / look_ms << " ops/s)\n"
+         << "TruePos  " << true_pos << "\n"
+         << "TrueNeg  " << true_neg << "\n"
          << "FP rate  " << fp_rate * 100 << " %\n"
          << "Peak RSS " << peak / 1048576.0 << " MB\n"
          << "Bits/elt " << peak * 8.0 / inserted << '\n';
 
     /* ---------- CSV output (matches reference exactly) ------------ */
     ofstream csv("bamboo_filter_results.csv", ios::app);
-    if (csv.tellp() == 0)          // write header once
-        csv << "kmer_size,num_elements,insert_time_ms,insert_throughput,"
-               "false_positive_rate,"
+    if (csv.tellp() == 0)          // write header once␊
+        csv << "kmer_size,num_elements,insert_time_ms,"
+               "true_positives,true_negatives,false_positive_rate,"
                "peak_memory_mb,bits_per_element\n";
 
     csv << k << ',' << inserted << ','
         << ins_ms << ',' << fixed << setprecision(2)
-        << inserted  * 1000.0 / ins_ms << ','
-        << look_ms << ','
+        << true_pos << ','
+        << true_neg << ','
         << fp_rate * 100 << ','
         << peak / 1048576.0 << ','
         << peak * 8.0 / inserted << '\n';

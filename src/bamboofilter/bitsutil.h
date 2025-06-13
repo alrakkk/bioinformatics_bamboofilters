@@ -56,8 +56,7 @@ inline constexpr bool has_value4(uint16_t x, uint16_t n) noexcept
  *  that is **≥ x**.  (By definition  upper_power2(0) == 1.)
  *
  *  Works by first spreading the most significant 1-bit to all lower
- *  positions (binary “smear”), then adding one.  Courtesy of “Hacker’s
- *  Delight”, Section 3-2.
+ *  positions (binary “smear”), then adding one..
  */
 inline uint64_t upper_power2(uint64_t x)
 {

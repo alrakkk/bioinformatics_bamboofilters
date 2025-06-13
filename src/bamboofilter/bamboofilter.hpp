@@ -2,8 +2,7 @@
 /*  bamboofilter.hpp  – FER Bioinformatics 1 2024/25
  *
  *  A *very* small-footprint approximate-membership filter inspired by
- *  Cuckoo-Filter design ideas (two possible locations, bounded kick-out),
- *  adapted for the FER Bioinformatics 2024/25 assignment.
+ *  Cuckoo-Filter design ideas (two possible locations, bounded kick-out).
  *
  *  •  Each **Segment** contains `BUCKETS_PER_SEG` *buckets*.
  *  •  Every **Bucket** holds exactly four 12-bit fingerprints (tags).
@@ -18,8 +17,6 @@
  *  *either* a C-string / `std::string` (hashed internally) **or** a ready
  *  -made 64-bit hash for maximum speed in the hot paths.
  *
- *  The public interface is *binary-compatible* with the reference
- *  solution so that the autograder sees exactly the same output.
  */
 
 #include <algorithm>
@@ -130,7 +127,7 @@ private:
 
 /* ----- helper: hashing & fingerprinting ---------------------------- */
 
-    /** Tiny, fast 64-bit FNV-1a hash (sufficient for our workload). */
+    /** Tiny, fast 64-bit FNV-1a hash  */
     static uint64_t hash_str(const char* s)
     {
         constexpr uint64_t off = 0xcbf29ce484222325ULL;
