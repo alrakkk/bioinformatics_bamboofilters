@@ -1,7 +1,5 @@
 #pragma once
-/* bitsutil.h  –  FER Bioinformatics 1 2024/25
- *
- *  All routines are **constexpr** / header-only so the compiler can fully inline and optimise them away.
+/* bitsutil.h  –  https://github.com/wanghanchengchn/bamboofilters
  */
 
 #include <cstdint>
@@ -51,13 +49,11 @@ inline constexpr bool has_value4(uint16_t x, uint16_t n) noexcept
 /* ===================================================================== */
 /*
  *  upper_power2(x)
- *  --------------
  *  Fast bit-twiddling routine that returns the *smallest* power-of-two
- *  that is **≥ x**.  (By definition  upper_power2(0) == 1.)
+ *  that is ≥ x.  (By definition  upper_power2(0) == 1.)
  *
  *  Works by first spreading the most significant 1-bit to all lower
- *  positions (binary “smear”), then adding one.  Courtesy of “Hacker’s
- *  Delight”, Section 3-2.
+ *  positions (binary “smear”), then adding one.
  */
 inline uint64_t upper_power2(uint64_t x)
 {
