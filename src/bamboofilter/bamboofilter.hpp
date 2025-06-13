@@ -1,9 +1,7 @@
 #pragma once
-/*  bamboofilter.hpp  – FER Bioinformatics 1 2024/25
- *
+/* 
  *  A *very* small-footprint approximate-membership filter inspired by
- *  Cuckoo-Filter design ideas (two possible locations, bounded kick-out),
- *  adapted for the FER Bioinformatics 2024/25 assignment.
+ *  Cuckoo-Filter design ideas (two possible locations, bounded kick-out)
  *
  *  •  Each **Segment** contains `BUCKETS_PER_SEG` *buckets*.
  *  •  Every **Bucket** holds exactly four 12-bit fingerprints (tags).
@@ -15,11 +13,9 @@
  *
  *  Only **fingerprints** are stored – the full 64-bit keys live outside
  *  the structure, which keeps memory tight.  All public functions accept
- *  *either* a C-string / `std::string` (hashed internally) **or** a ready
+ *  either a C-string / `std::string` (hashed internally) or a ready
  *  -made 64-bit hash for maximum speed in the hot paths.
- *
- *  The public interface is *binary-compatible* with the reference
- *  solution so that the autograder sees exactly the same output.
+ *   FNV-1a hash inspo from: https://gist.github.com/ruby0x1/81308642d0325fd386237cfa3b44785c
  */
 
 #include <algorithm>
@@ -67,8 +63,8 @@ public:
     bool Delete (const char*        s) { return Delete(hash_str(s)); }
     bool Delete (const std::string& s) { return Delete(s.c_str());   }
 
-    /* --- 64-bit fast-path (used by run_ecoli.cpp hot loops) -------- */
-    /** Insert a pre-hashed key (64-bit).  Returns *false* only if the
+    /* 64-bit fast-path (used by run_ecoli.cpp hot loops) */
+    /** Insert a pre-hashed key (64-bit).  Returns false only if the
      *  table is completely full and cuckoo evacuation failed.          */
     bool Insert(uint64_t h) {
         const uint16_t fp = fingerprint(h);           // 12-bit tag
@@ -86,7 +82,7 @@ public:
         return cuckoo(s1, b, fp);
     }
 
-    /** True if the hash *h* is *probably* in the filter. 0 % FN, small FP. */
+    /** True if the hash h is *probably* in the filter. 0 % FN, small FP. */
     bool Lookup(uint64_t h) const {
         const uint16_t fp = fingerprint(h);
         const uint32_t b  = h % buckets_per_seg;
@@ -128,9 +124,9 @@ private:
     std::random_device rd;
     std::mt19937       gen;
 
-/* ----- helper: hashing & fingerprinting ---------------------------- */
+/* helper: hashing & fingerprinting  */
 
-    /** Tiny, fast 64-bit FNV-1a hash (sufficient for our workload). */
+    /** Tiny, fast 64-bit FNV-1a hash. inspo from*/
     static uint64_t hash_str(const char* s)
     {
         constexpr uint64_t off = 0xcbf29ce484222325ULL;
