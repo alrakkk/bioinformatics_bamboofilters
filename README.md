@@ -122,3 +122,7 @@ Benchmarks show that Bamboo Filters outperform existing alternatives:
 3. Wang, Y., Wei, Z., Liu, G., & Sun, L. (2024). Bamboo Filters: Make Resizing Smooth and Adaptive. IEEE/ACM Transactions on Networking. doi: 10.1109/TNET.2024.3403997
 4. Fan, B., Andersen, D. G., & Kaminsky, M. (2013). Cuckoo Filter: Better Than Bloom. USENIX ;login:, 38(4), 36-40. Retrieved from https://www.cs.cmu.edu/~binfan/papers/login_cuckoofilter.pdf
 5. Fan, B., Andersen, D. G., Kaminsky, M., & Mitzenmacher, M. D. (2014). Cuckoo Filter: Practically Better Than Bloom. In Proceedings of the 10th ACM International on Conference on emerging Networking Experiments and Technologies (pp. 75-88). ACM. Retrieved from http://www.cs.cmu.edu/~binfan/papers/conext14_cuckoofilter.pdf
+
+
+
+This project was developed as part of the [Bioinformatics 1](https://www.fer.unizg.hr/en/course/enbio1) course at the Faculty of Electrical Engineering and Computing (FER), University of Zagreb.
