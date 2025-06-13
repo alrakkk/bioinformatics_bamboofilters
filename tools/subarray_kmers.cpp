@@ -1,4 +1,3 @@
-// -----------------------------------------------------------------------------
 //  E. coli k-mer benchmark using Bamboo Filter
 //
 //  • Reads a FASTA genome (upper-cases & filters to A/C/G/T).
@@ -7,7 +6,6 @@
 //  • Looks up positives (to sanity-check) and a random set of negatives
 //    (1-mutation neighbours) to measure the false-positive rate.
 //  • Streams CSV results to subarray_kmer_results.csv.
-// -----------------------------------------------------------------------------
 
 #include "bamboofilter/bamboofilter.hpp"   // <— upstream Bamboo Filter
 #include "util.hpp"                        // get_memory_usage(), Timer helpers
@@ -89,6 +87,8 @@ struct Result {
     uint64_t ins_ms;     // insertion time (ms)
     double  ins_tp;      // insertion throughput (k-mers / s)
     uint64_t look_ms;    // positive-lookup time (ms)
+    size_t  true_pos;    // true positives counted during lookup
+    size_t  true_neg;    // true negatives from negative queries
     double  fp_rate;     // false-positive rate on 10 000 negative queries
     double  peak_mb;     // peak RSS (MB) during insert
     double  bpe;         // bits per element ≈ memory efficiency
@@ -146,6 +146,7 @@ static Result benchmark(const string& seq, size_t sub_len, int k)
     }
     t.stop();
     uint64_t look_ms = t.elapsed_ms() ? t.elapsed_ms() : 1;
+    size_t   true_pos = ok;
 
     // ---------- Negative lookups ----------
     auto fp_kmers = generate_false_positive_tests(s, k, 10'000);
@@ -154,6 +155,7 @@ static Result benchmark(const string& seq, size_t sub_len, int k)
         if (bf.Lookup(hash_kmer(km)))
             ++fp;
     double fp_rate = static_cast<double>(fp) / fp_kmers.size();
+    size_t true_neg = fp_kmers.size() - fp;
 
     // ---------- Package results ----------
     Result r{ sub_len,
@@ -162,6 +164,8 @@ static Result benchmark(const string& seq, size_t sub_len, int k)
               ins_ms,
               inserted * 1000.0 / ins_ms,             // throughput (elements / s)
               look_ms,
+              true_pos,
+              true_neg,
               fp_rate,
               peak / 1'048'576.0,                     // bytes → MB
               peak * 8.0 / inserted };                // bits per element
@@ -201,7 +205,7 @@ int main(int argc, char** argv)
     // -------- CSV header --------
     ofstream csv("subarray_kmer_results.csv");
     csv << "subarray_len,kmer_size,num_elements,insert_time_ms,insert_throughput,"
-           "false_positive_rate,peak_memory_mb,bits_per_element\n";
+           "true_positives,true_negatives,false_positive_rate,peak_memory_mb,bits_per_element\n";
 
     // -------- Run all experiments --------
     for (size_t len : lens) {
@@ -213,6 +217,8 @@ int main(int argc, char** argv)
                 << res.ins_ms      << ','
                 << fixed << setprecision(2)
                 << res.ins_tp      << ','
+                << res.true_pos    << ','
+                << res.true_neg    << ','
                 << res.fp_rate * 100 << ','           // express as %
                 << res.peak_mb     << ','
                 << res.bpe         << '\n';
